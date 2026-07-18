@@ -15,6 +15,7 @@ This table lists the configuration variables required to operate Terraform Cloud
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
 **base_url** | optional | string | Terraform URL (e.g. https://app.terraform.io) |
+**verify_server_cert** | optional | boolean | Verify server SSL certificate |
 **token** | required | password | Authentication Token |
 
 ### Supported Actions
@@ -333,6 +334,7 @@ action_result.message | string | | Workspace id: ws-1jIskLtjsp |
 action_result.summary.workspace_id | string | | ws-1jIskLtjsp |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
+action_result.parameter.ph_0 | ph | | |
 
 ## action: 'apply run'
 
