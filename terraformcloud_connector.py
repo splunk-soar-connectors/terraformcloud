@@ -30,6 +30,7 @@ from terraformcloud_consts import (
 )
 import requests
 import json
+from urllib.parse import quote
 from bs4 import BeautifulSoup, UnicodeDammit
 import sys
 
@@ -41,7 +42,6 @@ class RetVal(tuple):
 
 class TerraformCloudConnector(BaseConnector):
     def __init__(self):
-
         # Call the BaseConnectors init first
         super(TerraformCloudConnector, self).__init__()
 
@@ -53,7 +53,6 @@ class TerraformCloudConnector(BaseConnector):
         self._base_url = None
 
     def _process_empty_response(self, response, action_result):
-
         if response.status_code == 200:
             return RetVal(phantom.APP_SUCCESS, {})
 
@@ -68,7 +67,6 @@ class TerraformCloudConnector(BaseConnector):
         )
 
     def _process_html_response(self, response, action_result):
-
         # An html response, treat it like an error
         status_code = response.status_code
 
@@ -93,7 +91,6 @@ class TerraformCloudConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_json_response(self, r, action_result):
-
         # Try a json parse
         try:
             resp_json = r.json()
@@ -120,7 +117,6 @@ class TerraformCloudConnector(BaseConnector):
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_response(self, r, action_result):
-
         # store the r_text in debug data, it will get dumped in the logs if the action fails
         if hasattr(action_result, "add_debug_data"):
             action_result.add_debug_data({"r_status_code": r.status_code})
@@ -273,7 +269,6 @@ class TerraformCloudConnector(BaseConnector):
         return self._process_response(r, action_result)
 
     def _handle_test_connectivity(self, param):
-
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         self.save_progress("Connecting to account details endpoint...")
@@ -292,7 +287,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_workspaces(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -319,7 +313,7 @@ class TerraformCloudConnector(BaseConnector):
         self.save_progress("Params: {}".format(params))
 
         endpoint = TERRAFORM_ENDPOINT_WORKSPACES.format(
-            organization_name=organization_name
+            organization_name=quote(str(organization_name), safe="")
         )
 
         # make rest call
@@ -333,7 +327,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_runs(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -357,7 +350,9 @@ class TerraformCloudConnector(BaseConnector):
 
         params = {"page[num]": page_num, "page[size]": page_size}
 
-        endpoint = TERRAFORM_ENDPOINT_LIST_RUNS.format(id=workspace_id)
+        endpoint = TERRAFORM_ENDPOINT_LIST_RUNS.format(
+            id=quote(str(workspace_id), safe="")
+        )
 
         # make rest call
         ret_val, response = self._make_rest_call(endpoint, action_result, params=params)
@@ -410,7 +405,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_create_workspace(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -447,7 +441,7 @@ class TerraformCloudConnector(BaseConnector):
         post_data["attributes"]["queue-all-runs"] = param.get("queue_all_runs", False)
         post_data = {"data": post_data}
         endpoint = TERRAFORM_ENDPOINT_WORKSPACES.format(
-            organization_name=organization_name
+            organization_name=quote(str(organization_name), safe="")
         )
 
         headers = {"Content-Type": "application/vnd.api+json"}
@@ -486,7 +480,9 @@ class TerraformCloudConnector(BaseConnector):
 
         headers = {"Content-Type": "application/vnd.api+json"}
 
-        endpoint = TERRAFORM_ENDPOINT_APPLY_RUN.format(run_id=run_id)
+        endpoint = TERRAFORM_ENDPOINT_APPLY_RUN.format(
+            run_id=quote(str(run_id), safe="")
+        )
 
         # make rest call
         ret_val, response = self._make_rest_call(
@@ -501,7 +497,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_apply(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -510,7 +505,7 @@ class TerraformCloudConnector(BaseConnector):
 
         id = param["id"]
 
-        endpoint = TERRAFORM_ENDPOINT_APPLIES.format(id=id)
+        endpoint = TERRAFORM_ENDPOINT_APPLIES.format(id=quote(str(id), safe=""))
 
         # make rest call
         ret_val, response = self._make_rest_call(endpoint, action_result)
@@ -523,7 +518,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_plan(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -532,7 +526,7 @@ class TerraformCloudConnector(BaseConnector):
 
         id = param["id"]
 
-        endpoint = TERRAFORM_ENDPOINT_PLANS.format(id=id)
+        endpoint = TERRAFORM_ENDPOINT_PLANS.format(id=quote(str(id), safe=""))
 
         # make rest call
         ret_val, response = self._make_rest_call(endpoint, action_result)
@@ -545,7 +539,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_run(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -554,7 +547,7 @@ class TerraformCloudConnector(BaseConnector):
 
         id = param["id"]
 
-        endpoint = "{}/{}".format(TERRAFORM_ENDPOINT_RUNS, id)
+        endpoint = "{}/{}".format(TERRAFORM_ENDPOINT_RUNS, quote(str(id), safe=""))
 
         # make rest call
         ret_val, response = self._make_rest_call(endpoint, action_result)
@@ -567,7 +560,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_workspace(self, param):
-
         self.save_progress(
             "In action handler for: {0}".format(self.get_action_identifier())
         )
@@ -579,13 +571,15 @@ class TerraformCloudConnector(BaseConnector):
         workspace_name = param.get("workspace_name")
 
         if id:
-            endpoint = TERRAFORM_ENDPOINT_GET_WORKSPACE_BY_ID.format(id=id)
+            endpoint = TERRAFORM_ENDPOINT_GET_WORKSPACE_BY_ID.format(
+                id=quote(str(id), safe="")
+            )
         elif organization_name and workspace_name:
             endpoint = "{}/{}".format(
                 TERRAFORM_ENDPOINT_WORKSPACES.format(
-                    organization_name=organization_name
+                    organization_name=quote(str(organization_name), safe="")
                 ),
-                workspace_name,
+                quote(str(workspace_name), safe=""),
             )
         else:
             return action_result.set_status(
@@ -604,7 +598,6 @@ class TerraformCloudConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def handle_action(self, param):
-
         ret_val = phantom.APP_SUCCESS
 
         # Get the action that we are supposed to execute for this App Run
@@ -645,7 +638,6 @@ class TerraformCloudConnector(BaseConnector):
         return ret_val
 
     def initialize(self):
-
         # Load the state in initialize, use it to store data
         # that needs to be accessed across actions
         self._state = self.load_state()
@@ -675,7 +667,6 @@ class TerraformCloudConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def finalize(self):
-
         # Save the state, this data is saved across actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS
