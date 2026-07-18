@@ -9,7 +9,7 @@
     "product_name": "Terraform Cloud",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
-    "license": "Copyright (c) 2020 Splunk Inc.",
+    "license": "Copyright (c) 2020-2026 Splunk Inc.",
     "app_version": "1.0.10",
     "utctime_updated": "2019-12-12T17:12:59.854486Z",
     "package_name": "phantom_terraformcloud",
@@ -275,10 +275,10 @@
                 {
                     "data_path": "action_result.data.*.data.*.relationships.organization.data.id",
                     "data_type": "string",
-                    "contains": [	
-                        "terraform organization name"	
-                    ],	
-                    "example_values": [	
+                    "contains": [
+                        "terraform organization name"
+                    ],
+                    "example_values": [
                         "Organization"
                     ],
                     "column_name": "Organization ID",
@@ -767,7 +767,7 @@
                 {
                     "data_path": "action_result.data.*.data.*.relationships.workspace.data.id",
                     "data_type": "string",
-                    "contains":[
+                    "contains": [
                         "terraform workspace id"
                     ],
                     "example_values": [
@@ -1665,6 +1665,10 @@
                     "example_values": [
                         1
                     ]
+                },
+                {
+                    "data_path": "action_result.parameter.ph_0",
+                    "data_type": "ph"
                 }
             ],
             "render": {
