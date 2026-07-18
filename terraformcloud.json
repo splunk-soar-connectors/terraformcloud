@@ -24,9 +24,10 @@
             "default": "https://app.terraform.io",
             "order": 0
         },
-        "ph1": {
-            "description": "Placeholder",
-            "data_type": "ph",
+        "verify_server_cert": {
+            "description": "Verify server SSL certificate",
+            "data_type": "boolean",
+            "default": true,
             "order": 1
         },
         "token": {

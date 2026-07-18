@@ -256,7 +256,9 @@ class TerraformCloudConnector(BaseConnector):
         url = "{}{}".format(self._base_url, endpoint)
 
         try:
-            r = request_func(url, verify=False, headers=_headers, **kwargs)
+            r = request_func(
+                url, verify=self._verify_server_cert, headers=_headers, **kwargs
+            )
         except Exception as e:
             return RetVal(
                 action_result.set_status(
@@ -666,6 +668,9 @@ class TerraformCloudConnector(BaseConnector):
 
         # token
         self._auth_token = config["token"]
+
+        # TLS server-certificate verification defaults to enabled.
+        self._verify_server_cert = config.get("verify_server_cert", True)
 
         return phantom.APP_SUCCESS
 
