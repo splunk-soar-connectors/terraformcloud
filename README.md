@@ -1,7 +1,7 @@
 # Terraform Cloud
 
 Publisher: Splunk Community <br>
-Connector Version: 1.0.10 <br>
+Connector Version: 1.0.11 <br>
 Product Vendor: HashiCorp <br>
 Product Name: Terraform Cloud <br>
 Minimum Product Version: 4.8.24304

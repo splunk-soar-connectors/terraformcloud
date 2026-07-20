@@ -1,4 +1,1 @@
 **Unreleased**
-
-* Enabled certificate verification for Terraform API requests by default.
-* Encoded Terraform API resource identifiers before using them in request paths.
