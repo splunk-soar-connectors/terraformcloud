@@ -1,5 +1,5 @@
 <!-- File: readme.html
-  Copyright (c) 2020 Splunk Inc.
+  Copyright (c) 2020-2026 Splunk Inc.
 
   Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
 --><html>
@@ -9,7 +9,7 @@
 <body>
     <h1>Authentication</h1>
     All requests must be authenticated with a bearer token. Use the HTTP header Authorization with the value Bearer {token}. If the token is absent or invalid, Terraform Cloud responds with HTTP status 401 and a JSON API error object. The 401 status code is reserved for problems with the authentication token; forbidden requests with a valid token result in a 404.
-    
+
     There are three kinds of token available:
     <ul>
         <li>
